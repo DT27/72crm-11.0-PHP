@@ -211,9 +211,10 @@ class Contract extends ApiCommon
         }
 
         //已进行审批，不能编辑
-        if (!in_array($dataInfo['check_status'], ['3', '4', '5', '6'])) {
+        //合同改为可编辑（仅适用于无需审批流的业务） DT27@2021-02-25 14:37:39
+        /*if (!in_array($dataInfo['check_status'], ['3', '4', '5', '6'])) {
             return resultArray(['error' => '当前状态为审批中或已审批通过，不可编辑']);
-        }
+        }*/
 
         if ($param['is_draft'] || (!empty($param['check_status']) && $param['check_status'] == 5)) {
             //保存为草稿
