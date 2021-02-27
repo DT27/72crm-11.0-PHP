@@ -314,13 +314,11 @@ class Common extends Model
 						break;
 					case 'customer':
 					case 'business':
-					case 'contacts':
+                    case 'contacts':
+                    case 'contract':
 						$val[$field['field']] = $val[$field['field'] . '_info']['name'];
 						break;
-                    case 'contacts':
-                        $val[$field['field']] = $val[$field['field'] . '_info']['name'];
-                        break;
-					default :
+                    default :
 						switch ($field['field']) {
 							// 商机销售阶段、商机状态组
 							case 'status_id':

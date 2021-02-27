@@ -238,6 +238,8 @@ class PseudoQueue
 
         if (!$res) {
             $this->error = '服务器繁忙，排队中...' . ($index - $this->max_exec);
+            //调试时清空缓存
+            //Cache::clear();
         }
 
         return $res;

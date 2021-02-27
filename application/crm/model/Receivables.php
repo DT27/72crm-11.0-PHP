@@ -45,12 +45,14 @@ class Receivables extends Common
 		$order_field = $request['order_field'];
     	$order_type = $request['order_type'];
         $getCount = $request['getCount'];
+        $is_excel = $request['is_excel']; //导出 DT27@2021-02-26 21:24:39
 		unset($request['scene_id']);
 		unset($request['search']);
 		unset($request['user_id']);
 		unset($request['order_field']);
 		unset($request['order_type']);
         unset($request['getCount']);
+        unset($request['is_excel']);
 
         $request = $this->fmtRequest( $request );
         $requestMap = $request['map'] ? : [];
@@ -78,7 +80,9 @@ class Receivables extends Common
 
 		//权限
 		$authMap = [];
-		$auth_user_ids = $userModel->getUserByPer('crm', 'receivables', 'index');
+        $a = 'index';
+        if ($is_excel) $a = 'excelExport';
+		$auth_user_ids = $userModel->getUserByPer('crm', 'receivables', $a);
 		if (isset($map['receivables.owner_user_id']) && $map['receivables.owner_user_id'][0] != 'like') {
 			if (!is_array($map['receivables.owner_user_id'][1])) {
 				$map['receivables.owner_user_id'][1] = [$map['receivables.owner_user_id'][1]];
@@ -148,7 +152,7 @@ class Receivables extends Common
         	$list[$k]['contract_id_info']['contract_id'] = $v['contract_id'] ? : '';
         	$list[$k]['contract_id_info']['name'] = $v['contract_num'] ? : '';
         	$list[$k]['contract_id_info']['money'] = $v['contract_money'] ? : '0.00';
-        	$list[$k]['contract_money'] = $v['contract_money'] ? : '0.00';  
+        	$list[$k]['contract_money'] = $v['contract_money'] ? : '0.00';
 			foreach ($userField as $key => $val) {
         		$list[$k][$val.'_info'] = isset($v[$val]) ? $userModel->getListByStr($v[$val]) : [];
         	}

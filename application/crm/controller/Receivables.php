@@ -593,4 +593,42 @@ class Receivables extends ApiCommon
 
         return resultArray(['data' => ['fileCount' => $fileCount]]);
     }
+
+    /**
+     * 导出回款
+     * @author DT27@2021-02-26 09:41:59
+     * @param
+     * @return
+     */
+    public function excelExport()
+    {
+        $param = $this->param;
+        $userInfo = $this->userInfo;
+        $param['user_id'] = $userInfo['id'];
+        if ($param['receivables_id']) {
+            $param['receivables_id'] = ['condition' => 'in', 'value' => $param['receivables_id'], 'form_type' => 'text', 'name' => ''];
+            $param['is_excel'] = 1;
+        }
+        $excelModel = new \app\admin\model\Excel();
+        // 导出的字段列表
+        $fieldModel = new \app\admin\model\Field();
+        $field_list = $fieldModel->getIndexFieldConfig('crm_receivables', $userInfo['id']);
+        // 文件名
+        $file_name = '5kcrm_receivables_' . date('Ymd');
+        $model = model('Receivables');
+        $temp_file = $param['temp_file'];
+        unset($param['temp_file']);
+        $page = $param['page'] ?: 1;
+        unset($param['page']);
+        unset($param['export_queue_index']);
+        return $excelModel->batchExportCsv($file_name, $temp_file, $field_list, $page, function ($page, $limit) use ($model, $param, $field_list) {
+            $param['page'] = $page;
+            $param['limit'] = $limit;
+            $data = $model->getDataList($param);
+            $data['list'] = $model->exportHandle($data['list'], $field_list, 'receivables');
+            //var_dump($data['list']);
+            //var_dump($field_list);
+            return $data;
+        });
+    }
 }
