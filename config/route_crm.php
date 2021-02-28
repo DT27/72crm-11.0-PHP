@@ -233,7 +233,7 @@ return [
     'crm/receivables/system' => ['crm/receivables/system', ['method' => 'POST']],
     // 【回款】菜单数量
     'crm/receivables/count' => ['crm/receivables/count', ['method' => 'POST']],
-    // 【回款】导出 DT27@2021-02-26 09:52:02
+    //【回款】导出
     'crm/receivables/excelExport' => ['crm/receivables/excelExport', ['method' => 'POST']],
 
     // 【回款计划】列表
