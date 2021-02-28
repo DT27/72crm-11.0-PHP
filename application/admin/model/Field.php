@@ -1386,6 +1386,7 @@ class Field extends Model
     {
         $userModel = new \app\admin\model\User();
         $structureModel = new \app\admin\model\Structure();
+
         switch ($form_type) {
             case 'datetime' :
                 $val = $val > 0 ? date('Y-m-d H:i:s', $val) : '';
@@ -1401,7 +1402,8 @@ class Field extends Model
                 $val = ArrayToString($structureModel->getStructureNameByArr($val));
                 break;
             case 'customer' :
-                $val = db('crm_customer')->where(['customer_id' => $val])->value('name');
+                // 修复导出Excel文件中的客户名显示 DT27@2021-02-28 17:24:45
+                $val = db('crm_customer')->where(['name' => $val])->value('name');
                 break;
             case 'business' :
                 $val = db('crm_business')->where(['business_id' => $val])->value('name');
