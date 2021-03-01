@@ -303,12 +303,14 @@ class Common extends Model
 						if (isset($val[$field['field'] . '_info']['realname'])) {
 							$val[$field['field']] = $val[$field['field'] . '_info']['realname'];
 						} else {
-							$val[$field['field']] = implode(',', array_column($val[$field['field'] . '_info'], 'realname'));
+                            //修复导出Excel中员工名称不显示 DT27@2021-03-01 15:27:54
+							//$val[$field['field']] = implode(',', array_column($val[$field['field'] . '_info'], 'realname'));
 						}
 						break;
 					case 'structure':
-						$temp = array_map(function ($val) { return $val->toarray(); }, $val[$field['field'] . '_info']);
-						$val[$field['field']] = implode(',', array_column($temp, 'name'));
+                        //修复导出Excel中部门名称不显示 DT27@2021-03-01 15:27:54
+						//$temp = array_map(function ($val) { return $val->toarray(); }, $val[$field['field'] . '_info']);
+						//$val[$field['field']] = implode(',', array_column($temp, 'name'));
 						break;
 					case 'datetime':
 						$val[$field['field']] = strtotime($val[$field['field']]) ? $val[$field['field']] : '';

@@ -1388,18 +1388,31 @@ class Field extends Model
         $structureModel = new \app\admin\model\Structure();
 
         switch ($form_type) {
+            //修复导出Excel中的电话号码格式 DT27@2021-03-01 15:27:54
+            case 'mobile' :
+                $val = "\t" . $val . "\t";
+                break;
+            //修复审核状态 DT27@2021-03-01 15:45:03
+            case 'text' :
+                if(is_int($val)){
+                    $selectVal = ['待审核', '审核中', '审核通过', '审核未通过', '撤回'];
+                    $val = $selectVal[$val];
+                }
+                break;
             case 'datetime' :
                 $val = $val > 0 ? date('Y-m-d H:i:s', $val) : '';
                 break;
             case 'user' :
-                $val = count($userModel->getUserNameByArr($val)) > 1 ? ArrayToString($userModel->getUserNameByArr($val)) : implode(',', $userModel->getUserNameByArr($val));
+                //修复导出Excel中员工姓名不显示 DT27@2021-03-01 15:27:54
+                //$val = count($userModel->getUserNameByArr($val)) > 1 ? ArrayToString($userModel->getUserNameByArr($val)) : implode(',', $userModel->getUserNameByArr($val));
                 break;
             case 'userStr' :
                 $val = explode(',', $val);
                 $val = count($userModel->getUserNameByArr($val)) > 1 ? ArrayToString($userModel->getUserNameByArr($val)) : implode(',', $userModel->getUserNameByArr($val));
                 break;
             case 'structure' :
-                $val = ArrayToString($structureModel->getStructureNameByArr($val));
+                //修复导出Excel中部门名称不显示 DT27@2021-03-01 15:27:54
+                //$val = ArrayToString($structureModel->getStructureNameByArr($val));
                 break;
             case 'customer' :
                 // 修复导出Excel文件中的客户名显示 DT27@2021-02-28 17:24:45
